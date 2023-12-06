@@ -1,0 +1,52 @@
+﻿<h3>SdSideToolBar</h3>
+
+<Tab>
+	<TabItem Text="基础">
+		<AutoFill TValue="BridgeType" Value="typeModel" Items="typeItems" IsLikeMatch="true" OnSelectedItemChanged="OnSelectedItemChanged"
+				  OnGetDisplayText="OnGetDisplayText" class="mb-3" IsSelectAllTextOnFocus="true">
+			<Template>
+				<div class="d-flex">
+					<div>
+						<img src=@context.ImgUrl class="bb-avatar" />
+					</div>
+					<div class="ps-2">
+						<div>@context.TypeName</div>
+					</div>
+				</div>
+			</Template>			
+		</AutoFill>
+	</TabItem>
+
+	<TabItem Text="进阶">
+
+	</TabItem>
+</Tab>
+
+@code {
+	private BridgeType? typeModel;
+	private List<BridgeType>? typeItems;
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+
+		typeItems = this.GenerateBridgeType();
+		//typeModel = typeItems.First();
+	}
+
+	private Task OnSelectedItemChanged(BridgeType bridgeType)
+	{
+		typeModel = Utility.Clone(bridgeType);
+		StateHasChanged();
+		return Task.CompletedTask;
+	}
+
+	private static string OnGetDisplayText(BridgeType bridgeType) => bridgeType.TypeName ?? "";
+
+	private List<BridgeType> GenerateBridgeType() => new List<BridgeType>
+	{
+		new BridgeType("梁桥", "images/bridgeType/BeamBridge.png"),
+		new BridgeType("拱桥", "images/bridgeType/ArchBridge.png"),
+		new BridgeType("斜拉桥", "images/bridgeType/Cable-stayedBridges.png"),
+		new BridgeType("悬索桥", "images/bridgeType/SuspensionBridge.png"),
+	};
+}
